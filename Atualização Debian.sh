@@ -2,14 +2,9 @@
 
 ###Debian###
 
-#Substituir a sources list do arquivo "sudo nano /etc/apt/sources.list" com o texto abaixo sem comentar as linhas deb:
+#Substituir a sources list do arquivo "nano /etc/apt/sources.list.d/debian.sources" com o texto abaixo sem comentar as linhas deb:
 
-## See https://wiki.debian.org/SourcesList for more information.
-#deb http://deb.debian.org/debian trixie main non-free-firmware
-#deb-src http://deb.debian.org/debian trixie main non-free-firmware
-
-#deb http://security.debian.org/debian-security/ trixie-security main non-free-firmware
-#deb-src http://security.debian.org/debian-security/ trixie-security main non-free-firmware
+#https://wiki.debian.org/SourcesList
 
 #Após substituição executar o seguinte comando:
 #sudo rm /var/lib/apt/lists/lock
