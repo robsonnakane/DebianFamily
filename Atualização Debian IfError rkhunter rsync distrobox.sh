@@ -6,10 +6,21 @@
 set -euo pipefail
 ##O comando "set -euo" faz o script parar imediatamente caso qualquer comando dentro dele retorne um erro (exit code diferente de 0).(-e → para no erro) (-u → trata variáveis não definidas como erro) (-o pipefail → considera falha em pipe () se qualquer comando falhar
 
-fastfetch
+echo ">>Ajuste sobre escala fora do padrão"
+##Editar no tty disponível:
+#sudo nano /etc/default/grub
+#GRUB_CMDLINE_LINUX_DEFAULT="quiet nomodeset"
+#GRUB_GFXMODE=1280x1024 ( confirmar antes a resolução correta )
+#GRUB_GFXPAYLOAD_LINUX=keep
+#sudo update-grub
+#sudo reboot -i
+
+echo ">>Adicionar o usuário no arquivo sudoers pelo terminal:"
+#su - 
+#usermod -aG sudo robsonnakane
 
 echo ">>Instalção dos pacotes na base do sistema"
-#sudo apt install distrobox curl openjdk-25-jre flatpak -y
+#sudo apt install distrobox curl openjdk-25-jre flatpak apt-listbugs apt-listchanges -y
 
 echo ">>Instalação do certificado digital (pós instalação, direto no terminal)"
 #wget https://github.com/karakun/OpenWebStart/releases/download/v1.14.0/OpenWebStart_linux_1_14_0.deb
@@ -51,13 +62,23 @@ echo "$?"
 ##Importação dos arquivos transferidos via Tailscale (/var/lib/tailscale/files)
 #sudo tailscale file get ~/
 
-echo "APT Autoremove"
-sudo apt autoremove -y && \
-echo "$?"
-echo "APT Update"
+echo ">>APT Update"
 sudo apt update -y && \
 echo "$?"
-echo "APT Upgrade"
+echo ">>APT Upgrade"
 sudo apt upgrade -y && \
+echo "$?"
+echo ">>Lista dos pacotes com bugs"
+sudo dpkg --configure -a
+echo "$?"
+echo ">>Caso tenha algum pacote listado, apt-listbugs e escolher a opção 'p' para pinar os pacotes com bugs"
+echo ">>Verifica o cache e busca dependências quebradas"
+sudo apt-get check
+echo "$?"
+echo ">>Garante que nenhuma dependência ficou órfã ou corrompida"
+sudo apt install -f
+echo "$?"
+echo ">>APT Autoremove"
+sudo apt autoremove -y && \
 echo "$?"
 echo ">>Se no resumo tiver atualização, reiniciar. Caso contrário digite: exit e pressione enter.<<"
