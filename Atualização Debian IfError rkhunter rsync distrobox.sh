@@ -20,7 +20,7 @@ echo ">>Adicionar o usuário no arquivo sudoers pelo terminal:"
 #usermod -aG sudo robsonnakane
 
 echo ">>Instalção dos pacotes na base do sistema"
-#sudo apt install distrobox curl openjdk-25-jre flatpak apt-listbugs apt-listchanges -y
+#sudo apt install distrobox curl openjdk-25-jre flatpak apt-listbugs apt-listchanges rsync ptyxis -y
 
 echo ">>Instalação do certificado digital (pós instalação, direto no terminal)"
 #wget https://github.com/karakun/OpenWebStart/releases/download/v1.14.0/OpenWebStart_linux_1_14_0.deb
