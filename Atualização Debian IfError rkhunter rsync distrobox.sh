@@ -66,7 +66,8 @@ echo ">>APT Update"
 sudo apt update -y && \
 echo "$?"
 echo ">>APT Upgrade"
-sudo apt upgrade -y && \
+#sudo apt upgrade -y && \ #Debian Stable
+sudo apt full-upgrade -y && \ #Debian Sid
 echo "$?"
 echo ">>Lista dos pacotes com bugs"
 sudo dpkg --configure -a
