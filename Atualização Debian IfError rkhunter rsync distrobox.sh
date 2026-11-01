@@ -32,6 +32,11 @@ echo ">>Login Tailscale (pós instalação, direto no terminal)"
 #systemctl enable --now tailscaled
 #sudo tailscale up --ssh --accept-dns --force-reauth
 
+echo "Tailscale e SSH ativos"
+systemctl enable --now tailscaled && \
+systemctl enable --now sshd && \
+echo "$?"
+
 echo ">>Instalação de programas no distrobox"
 #distrobox create --name archlinux --image archlinux:latest; distrobox enter archlinux -- sudo pacman -S --noconfirm fastfetch; distrobox enter archlinux -- sudo pacman -S --noconfirm simple-scan; distrobox enter archlinux -- sudo pacman -S --noconfirm kdenlive; distrobox enter archlinux -- sudo pacman -S --noconfirm inkscape; distrobox enter archlinux -- sudo pacman -S --noconfirm thunderbird; distrobox enter archlinux -- sudo pacman -S --noconfirm audacious; distrobox enter archlinux -- sudo pacman -S --noconfirm gimp; distrobox enter archlinux -- sudo pacman -S --noconfirm vlc; distrobox enter archlinux -- sudo pacman -S --noconfirm transmission-gtk; distrobox enter archlinux -- sudo pacman -S --noconfirm rpi-imager; distrobox enter archlinux -- sudo pacman -S --noconfirm gwenview; distrobox enter archlinux -- sudo pacman -S --noconfirm kate; distrobox enter archlinux -- sudo pacman -S --noconfirm yt-dlp; 
 
