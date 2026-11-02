@@ -36,12 +36,12 @@ echo ">>Instalação dos programas Flatpak<<"
 #flatpak install flathub com.spotify.Client -y; flatpak install flathub us.zoom.Zoom -y; flatpak install flathub org.onlyoffice.desktopeditors -y; flatpak install flathub com.adobe.Flash-Player-Projector -y; flatpak install flathub com.github.IsmaelMartinez.teams_for_linux -y; flatpak install flathub org.fedoraproject.MediaWriter -y; flatpak install flathub org.kde.kget -y; flatpak install flathub org.videolan.VLC -y; flatpak install flathub net.mkiol.SpeechNote -y; flatpak install flathub com.saivert.pwvucontrol -y; flatpak install flathub io.github.dvlv.boxbuddyrs -y; flatpak install flathub org.telegram.desktop -y; flatpak install flathub com.obsproject.Studio -y; flatpak install flathub org.audacityteam.Audacity -y; flatpak install flathub com.github.tchx84.Flatseal -y; flatpak install flathub com.google.ChromeDev -y; flatpak install flathub com.mattjakeman.ExtensionManager -y;
 echo "########################################################################################################"
 echo ">>Atualização do Flatpak<<"
-flatpak update -y && \
+flatpak update -y || true
 echo "$?"
 echo ">>Atualização dos pacotes instalados via distrobox<<"
-distrobox enter archlinux -- sudo pacman -Syyuu --noconfirm && \
+distrobox enter archlinux -- sudo pacman -Syyuu --noconfirm || true
 echo ">>Limpeza do cache archlinux<<"
-distrobox enter archlinux -- sudo pacman -Scc --noconfirm && \
+distrobox enter archlinux -- sudo pacman -Scc --noconfirm || true
 echo "$?"
 ##Baixar um vídeo em melhor qualidade:##
 #distrobox enter archlinux -- yt-dlp URL
@@ -52,36 +52,39 @@ echo "$?"
 #sudo tailscale file get ~/
 echo "########################################################################################################"
 echo ">>APT Update<<"
-sudo apt update -y && \
+sudo apt update -y || true
 echo "$?"
 echo ">>Modernização das fontes<<"
-apt modernize-sources -n && \
+apt modernize-sources || true
 echo "$?"
 echo ">>Lista dos pacotes atualizáveis<<"
-apt list --upgradable && \
+apt list --upgradable ||
 echo "$?"
 echo ">>Simulação do APT Upgrade<<"
-sudo apt upgrade -sy && \
+sudo apt upgrade -sy || true
 echo ">>Lista dos pacotes com bugs<<"
-sudo dpkg --configure -a
+sudo dpkg --configure -a || true
 echo "$?"
 echo "########################################################################################################"
 echo ">>Caso tenha algum pacote listado, apt-listbugs e escolher a opção 'p' para pinar os pacotes com bugs<<"
 echo "########################################################################################################"
 echo ">>Verifica o cache e busca dependências quebradas<<"
-sudo apt-get check
+sudo apt-get check || true
 echo "$?"
 echo ">>Garante que nenhuma dependência ficou órfã ou corrompida<<"
-sudo apt install -f
+sudo apt install -f || true
 echo "$?"
 echo ">>APT Autoremove<<"
-sudo apt autoremove -y && \
+sudo apt autoremove -y || true
 echo "$?"
 echo ">>Lista pacotes pinados que podem ser atualizados<<"
-apt-listbugs list $(apt-mark showhold) | grep -E "Pendente|Encaminhado|Resolvido" ||
+apt-listbugs list $(apt-mark showhold) | grep -E "Resolvido" || true
+#"Pendente|Encaminhado|Resolvido"
 echo "$?"
 echo ">>Limpeza de restos de pacotes<<"
-sudo apt-get purge $(dpkg -l | awk '/^rc/{print$2}')
+sudo apt-get purge $(dpkg -l | awk '/^rc/{print$2}') || true
+echo "$?"
+sudo ./quarentena_debiansid.sh --executar || true
 echo "$?"
 echo "########################################################################################################"
 echo ">>sudo apt full-upgrade é aplicavel se tudo estiver ok<<"
