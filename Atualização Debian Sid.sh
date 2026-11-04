@@ -51,14 +51,15 @@ echo "$?"
 ##Importação dos arquivos transferidos via Tailscale (/var/lib/tailscale/files)
 #sudo tailscale file get ~/
 echo "########################################################################################################"
-echo ">>APT Update<<"
+echo ">>Modernização das fontes<<"
+#apt modernize-sources || true
+yes "Y" | sudo apt modernize-sources || true
+echo "$?"
+echo ">>APT update<<"
 sudo apt update -y || true
 echo "$?"
-echo ">>Modernização das fontes<<"
-apt modernize-sources || true
-echo "$?"
 echo ">>Lista dos pacotes atualizáveis<<"
-apt list --upgradable ||
+apt list --upgradable --no-pager 2>/dev/null || true
 echo "$?"
 echo ">>Simulação do APT Upgrade<<"
 sudo apt upgrade -sy || true
@@ -77,14 +78,30 @@ echo "$?"
 echo ">>APT Autoremove<<"
 sudo apt autoremove -y || true
 echo "$?"
-echo ">>Lista pacotes pinados que podem ser atualizados<<"
-apt-listbugs list $(apt-mark showhold) | grep -E "Resolvido" || true
-#"Pendente|Encaminhado|Resolvido"
+echo ">>Status dos pacotes na lista de bugs do Debian<<"
+apt-listbugs list $(apt-mark showhold) | grep -E "Pendente|Encaminhado|Resolvido" || true
 echo "$?"
 echo ">>Limpeza de restos de pacotes<<"
 sudo apt-get purge $(dpkg -l | awk '/^rc/{print$2}') || true
 echo "$?"
 sudo ./quarentena_debiansid.sh --executar || true
+echo "$?"
+echo "########################################################################################################"
+echo ">>Ferramenta em teste<<"
+echo "########################################################################################################"
+echo ">>Lista das dependencias dos pacotes a remover<<"
+apt -s full-upgrade | awk '/^Remv / {print $2}' | xargs -I {} sh -c '
+  echo "----------------------------------------";
+  echo "📦 PACOTE A SER REMOVIDO: {}";
+  echo "----------------------------------------";
+  echo "[⬇️] Ele DEPENDE de (Dependências):";
+  apt-cache depends {} | grep -E "(Depends|PreDepends):" | awk "{print \"  -> \" \$2}" || echo "  (Nenhuma)";
+  echo "";
+  echo "[⬆️] Quem DEPENDE DELE instalado no sistema (Dep. Reversas):";
+  apt-cache rdepends --installed {} | grep -v -E "(Reverse Depends:|{})" | awk "{print \"  -> \" \$1}" || echo "  (Nenhum)";
+  echo "";
+'
+echo "########################################################################################################"
 echo "$?"
 echo "########################################################################################################"
 echo ">>sudo apt full-upgrade é aplicavel se tudo estiver ok<<"
