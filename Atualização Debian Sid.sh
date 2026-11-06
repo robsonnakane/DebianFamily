@@ -84,8 +84,7 @@ echo "$?"
 echo ">>Limpeza de restos de pacotes<<"
 sudo apt-get purge $(dpkg -l | awk '/^rc/{print$2}') || true
 echo "$?"
-sudo ./quarentena_debiansid.sh --executar || true
-echo "$?"
+
 echo "########################################################################################################"
 echo ">>Ferramenta em teste<<"
 echo "########################################################################################################"
@@ -101,7 +100,16 @@ apt -s full-upgrade | awk '/^Remv / {print $2}' | xargs -I {} sh -c '
   apt-cache rdepends --installed {} | grep -v -E "(Reverse Depends:|{})" | awk "{print \"  -> \" \$1}" || echo "  (Nenhum)";
   echo "";
 '
+echo "$?"
 echo "########################################################################################################"
+echo ">>Ferramenta em teste<<"
+echo "########################################################################################################"
+sudo ./"Validador de Inicialização Automática (Post-Upgrade Health Check).sh"
+echo "$?"
+echo "########################################################################################################"
+echo ">>Ferramenta em teste<<"
+echo "########################################################################################################"
+sudo ./quarentena_debiansid.sh --executar || true
 echo "$?"
 echo "########################################################################################################"
 echo ">>sudo apt full-upgrade é aplicavel se tudo estiver ok<<"
